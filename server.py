@@ -1,9 +1,9 @@
 import os
 import httpx
-from fastmcp import FastMCP
+from mcp.server.fastmcp import FastMCP
 
-# Create the MCP server
-mcp = FastMCP("http-headers-security")
+# Create the MCP server with stateless_http for optimal scalability
+mcp = FastMCP("http-headers-security", stateless_http=True)
 
 # OWASP Headers to recommend removing (information disclosure)
 HEADERS_TO_REMOVE = [
@@ -121,13 +121,12 @@ async def analyze_http_header(target: str) -> str:
         return f"Error: {str(e)}"
 
 
-# Run the server
+# Run the server with streamable-http transport
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     
     mcp.run(
-        transport="sse",
+        transport="streamable-http",
         host="0.0.0.0",
-        port=port,
-        path="/mcp"
+        port=port
     )
