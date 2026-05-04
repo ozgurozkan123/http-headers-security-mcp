@@ -121,13 +121,12 @@ async def analyze_http_header(target: str) -> str:
         return f"Error: {str(e)}"
 
 
-# Run the server with SSE transport (creates /mcp endpoint)
+# Run the server with HTTP transport (supports POST requests at /mcp)
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     
     mcp.run(
-        transport="sse",
+        transport="http",
         host="0.0.0.0",
-        port=port,
-        path="/mcp"
+        port=port
     )
